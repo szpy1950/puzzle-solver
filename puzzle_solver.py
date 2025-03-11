@@ -3,6 +3,19 @@
 from PIL import Image
 import cv2
 
+def process_image(path:str):
+    img = cv2.imread(path)
+    # apply grayscale and binarization on picture
+    # copy modified picture into new directory
+
+def detect_pieces(path:str):
+    # Extract jigsaw pieces from processed image
+    # Save all pieces into a new directory
+
+def identify_pieces(path:str):
+    # For each piece, create a new puzzle piece object
+    # Each puzzle piece 
+
 def solve_puzzle(image_path):
     print("Doing some work")
 
