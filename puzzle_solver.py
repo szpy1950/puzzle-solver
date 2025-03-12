@@ -11,27 +11,23 @@ import glob
     # Additional methods to rotate and set position
 
 def process_image(path:str):
-    img = cv2.imread(path)
-    img = cv.resize(img,(1000,1000))
-    gray_img = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray_img, threshold1=50, threshold2=200)
+    image = cv2.imread(path)
+    image = cv.resize(image,(1000,1000))
 
-    cv2.imshow("Edges", edges)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()    
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (7, 7), 0)
 
-    #_, binary_image = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
-    adaptive_thresh = cv2.adaptiveThreshold(gray_img, 
-                                       255, 
-                                       cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                                       cv2.THRESH_BINARY, 
-                                       blockSize=11, 
-                                       C=2)
+    # Manual thresholding
+    (T, thresh) = cv2.threshold(blurred, 148, 255, cv2.THRESH_BINARY_INV)
+    cv2.imshow("Threshold Binary", thresh)
+    cv.waitKey(0)
 
-    cv2.imshow("Binary", adaptive_thresh)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()  
-
+    (T, threshInv) = cv2.threshold(blurred, 0, 255,
+	cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
+    cv2.imshow("Threshold", threshInv)
+    cv.waitKey(0)
+    print("[INFO] otsu's thresholding value: {}".format(T))
+     
     return
 
 
