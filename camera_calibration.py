@@ -45,7 +45,7 @@ objp[:,:2] = np.mgrid[0:6,0:9].T.reshape(-1,2)
 # Arrays to store object points and image points from all the images.
 objpoints = [] # 3d point in real world space
 imgpoints = [] # 2d points in image plane.
- 
+
 images = glob.glob('images/calibration/*.jpg')
 print(images)
  
@@ -56,6 +56,7 @@ for fname in images:
  
     # Find the chess board corners
     ret, corners = cv2.findChessboardCorners(gray,CHECKERBOARD,None)
+    print(ret)
  
     # If found, add object points, image points (after refining them)
     if ret == True:
@@ -73,3 +74,12 @@ cv.destroyAllWindows()
 
 # Get camera matrix, distortion coefficients, rotation and translation vectors
 ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+print(mtx)
+
+img = cv.imread('images/calibration/3PF7XMPh.jpg')
+h,  w = img.shape[:2]
+newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
+
+# undistort
+dst = cv.undistort(img, mtx, dist, None, newcameramtx)
+cv.imwrite('calibresult.png', dst)

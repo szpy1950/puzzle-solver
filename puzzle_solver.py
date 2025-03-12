@@ -12,8 +12,25 @@ import glob
 
 def process_image(path:str):
     img = cv2.imread(path)
+    img = cv.resize(img,(1000,1000))
+    gray_img = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray_img, threshold1=50, threshold2=200)
 
-    # Perform camera calibration
+    cv2.imshow("Edges", edges)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()    
+
+    #_, binary_image = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
+    adaptive_thresh = cv2.adaptiveThreshold(gray_img, 
+                                       255, 
+                                       cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                       cv2.THRESH_BINARY, 
+                                       blockSize=11, 
+                                       C=2)
+
+    cv2.imshow("Binary", adaptive_thresh)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()  
 
     return
 
@@ -57,5 +74,5 @@ def solve_puzzle(image_path):
     return solution
 
 if __name__ == '__main__':
-    print("hello")
+    process_image('images/puzzle1.jpg')
     
