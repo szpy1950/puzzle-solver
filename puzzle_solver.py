@@ -22,11 +22,22 @@ def process_image(path:str):
     cv2.imshow("Threshold Binary", thresh)
     cv.waitKey(0)
 
+    # visualize only the masked regions in the image
+    masked = cv2.bitwise_and(image, image, mask=thresh)
+    cv2.imshow("Output", masked)
+    cv2.waitKey(0)
+
+    # Otsu thresholding
     (T, threshInv) = cv2.threshold(blurred, 0, 255,
 	cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
-    cv2.imshow("Threshold", threshInv)
+    cv2.imshow("Ottsu thresholding", threshInv)
     cv.waitKey(0)
     print("[INFO] otsu's thresholding value: {}".format(T))
+
+    # visualize only the masked regions in the image
+    masked = cv2.bitwise_and(image, image, mask=threshInv)
+    cv2.imshow("Output", masked)
+    cv2.waitKey(0)
      
     return
 
